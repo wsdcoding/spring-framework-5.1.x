@@ -41,6 +41,11 @@ import org.springframework.util.StringUtils;
  * @see ClassLoader#getResourceAsStream(String)
  * @see Class#getResourceAsStream(String)
  */
+
+/**
+ *	四个构造方法，般调用一个参数的即可，也就是传入文件路径即可，
+ *	它内部会调用另外一个重载的方法，给 classloader 赋上值（因为在后面要通过 classloader 去读取文件）。
+ */
 public class ClassPathResource extends AbstractFileResolvingResource {
 
 	private final String path;
@@ -94,6 +99,10 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @see java.lang.Class#getResourceAsStream
 	 */
 	public ClassPathResource(String path, @Nullable Class<?> clazz) {
+		/**
+		 * 在 ClassPathResource 初始化的过程中，会先调用 StringUtils.cleanPath 方法对传入的路径进行清理，
+		 * 所谓的路径清理，就是处理路径中的相对地址、Windows 系统下的 \\ 变为 / 等。
+		 */
 		Assert.notNull(path, "Path must not be null");
 		this.path = StringUtils.cleanPath(path);
 		this.clazz = clazz;
@@ -118,6 +127,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 
 	/**
 	 * Return the path for this resource (as resource path within the class path).
+	 * getPath 方法用来返回文件路径，这是一个相对路径，不包含 classpath
 	 */
 	public final String getPath() {
 		return this.path;
@@ -145,6 +155,12 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	/**
 	 * Resolves a URL for the underlying class path resource.
 	 * @return the resolved URL, or {@code null} if not resolvable
+	 *
+	 * resolveURL 方法表示返回资源的 URL，返回的时候优先用 Class.getResource 加载，
+	 * 然后才会用 ClassLoader.getResource 加载，关于 Class.getResource 和 ClassLoader.getResource 的区别，
+	 * 又能写一篇文章出来，我这里就大概说下，
+	 * Class.getResource 最终还是会调用 ClassLoader.getResource，
+	 * 只不过 Class.getResource 会先对路径进行处理。
 	 */
 	@Nullable
 	protected URL resolveURL() {
@@ -163,6 +179,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * This implementation opens an InputStream for the given class path resource.
 	 * @see java.lang.ClassLoader#getResourceAsStream(String)
 	 * @see java.lang.Class#getResourceAsStream(String)
+	 *
+	 * getInputStream 读取资源，并返回 InputStream 对象
 	 */
 	@Override
 	public InputStream getInputStream() throws IOException {
@@ -201,6 +219,8 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * This implementation creates a ClassPathResource, applying the given path
 	 * relative to the path of the underlying resource of this descriptor.
 	 * @see org.springframework.util.StringUtils#applyRelativePath(String, String)
+	 *
+	 * createRelative 方法是根据当前的资源，再创建一个相对资源
 	 */
 	@Override
 	public Resource createRelative(String relativePath) {
