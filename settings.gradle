@@ -21,14 +21,15 @@ include "spring-webflux"
 include "spring-websocket"
 include "spring-framework-bom"
 
-// Exposes gradle buildSrc for IDE support
+// Exposes gradle buildSrc for IDE support 以下是自己生成的项目
 include "buildSrc"
+include 'spring-mytest'
+include 'mytest'
 rootProject.children.find{ it.name == "buildSrc" }.name = "spring-build-src"
 
 rootProject.name = "spring"
 rootProject.children.each {project ->
 	project.buildFileName = "${project.name}.gradle"
 }
-include 'mytest'
-include 'spring-mytest'
+
 

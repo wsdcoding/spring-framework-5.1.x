@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository("dao")
 public class UserDao {
 	public void printInfo(){
-		System.out.println("is ok");
+		System.out.println("Spring course build is ok ！！！");
 	}
 }

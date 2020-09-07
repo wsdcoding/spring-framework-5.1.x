@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'org.springframework'
+version '5.1.16.BUILD-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+/*dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(":spring-context")
+}*/
+//一下是自己修改的脚本内容，加快项目构建速度，不然等Task太麻烦了
+// 对该模块的描述
+description = "spring学习模块"
+// 项目依赖
+dependencies {
+    // 添加对spring-context的依赖
+    implementation(project(":spring-context"))
+}
