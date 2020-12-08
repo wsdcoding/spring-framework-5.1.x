@@ -248,6 +248,10 @@ public class ProxyFactoryBean extends ProxyCreatorSupport
 	@Nullable
 	public Object getObject() throws BeansException {
 		initializeAdvisorChain();
+		/**
+		 * 在 Spring 的配置中，如果不做任何设置，那么 Spring 代理生成的 Bean 都是单例对象。
+		 * 如果修改 scope 则每次创建一个新的原型对象。
+		 */
 		if (isSingleton()) {
 			return getSingletonInstance();
 		}
